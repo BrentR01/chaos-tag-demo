@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🚨 CHAOS TAG – Training Demo</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .center{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px}
+  .btn{font-size:20px;padding:14px 22px;border-radius:12px;border:0;background:#ff3b30;color:#fff}
+  .btn:active{transform:scale(.98)}
+  .small{opacity:.8;font-size:14px}
+  .flash{animation:flash 120ms infinite alternate}
+  @keyframes flash{from{background:#fff;color:#000}to{background:#000;color:#fff}}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div id="screen" class="center">
+  <h1>🚨 CHAOS TAG</h1>
+  <p>Harmless training demo. Tap the button to begin.</p>
+  <button id="start" class="btn">Start Chaos</button>
+  <p class="small">iOS requires one tap to enable audio & actions.</p>
+</div>
+
+<script>
+(function(){
+  const screen = document.getElementById('screen');
+  const startBtn = document.getElementById('start');
+
+  function startSiren(){
+    try{
+      const ctx = new (window.AudioContext||window.webkitAudioContext)();
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type='sawtooth';
+      o.connect(g); g.connect(ctx.destination);
+      o.start();
+      let t=0, up=true;
+      setInterval(()=>{
+        if(up){ t+=20; if(t>1200) up=false; }
+        else { t-=20; if(t<400) up=true; }
+        o.frequency.setValueAtTime(t, ctx.currentTime);
+        g.gain.setValueAtTime(0.08, ctx.currentTime);
+      },40);
+    }catch(e){}
+  }
+
+  function vib() {
+    if (navigator.vibrate) {
+      navigator.vibrate([60,40,60,40,60,200,60,40,400]);
+    }
+  }
+
+  function clickHidden(href, downloadName){
+    const a = document.createElement('a');
+    a.href = href;
+    if(downloadName) a.download = downloadName;
+    a.rel = 'noopener';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>a.remove(), 2000);
+  }
+
+  function openChaos(){
+    document.body.classList.add('flash');
+    startSiren();
+    vib();
+
+    setTimeout(()=>{
+      window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1', '_blank', 'noopener');
+    }, 300);
+
+    setTimeout(()=>{
+      clickHidden('mr-pickles.vcf', 'Mr-Pickles.vcf');
+    }, 1200);
+
+    setTimeout(()=>{
+      clickHidden('chaos-demo.ics', 'chaos-demo.ics');
+    }, 2100);
+
+    let i=0;
+    const msgs=[
+      '⚠️ System Alert: Unusual activity detected.',
+      '🔊 Volume boosted. (Not really, but it sounds like it!)',
+      '📇 Contact “Mr. Pickles” ready to add.',
+      '📅 Training calendar event prepared.'
+    ];
+    const interval = setInterval(()=>{
+      if(i>=msgs.length) return clearInterval(interval);
+      alert(msgs[i++]);
+    }, 1600);
+
+    setTimeout(()=>{
+      window.location.href = 'shortcuts://run-shortcut?name=Self%20Destruct';
+    }, 3800);
+  }
+
+  startBtn.addEventListener('click', openChaos, {once:true});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Chaos Tag//EN
+BEGIN:VEVENT
+UID:chaos-training-001@example.com
+DTSTAMP:20250101T000000Z
+DTSTART:20250101T000000Z
+DTEND:20250101T010000Z
+SUMMARY:This is a demo calendar event from CHAOS TAG
+DESCRIPTION:Harmless training event created by scanning a tag.
+END:VEVENT
+END:VCALENDAR
